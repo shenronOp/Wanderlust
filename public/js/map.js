@@ -1,5 +1,6 @@
 
 const map = L.map("map").setView([48.1500327, 11.5753989], 10);
+console.log(listing)
 
 const isRetina = L.Browser.retina;
 const baseUrl =
@@ -34,10 +35,10 @@ L.marker([lat, lng], { icon: customIcon })
 .bindTooltip(
 `
 <div class="map-tooltip">
-    <div class="tooltip-title"><%= listing.title %></div>
+    <div class="tooltip-title">${listing.title}</div>
     <div class="tooltip-location">
     <i class="fa-solid fa-location-dot"></i>
-    <%= listing.location %>, <%= listing.country %>
+    ${listing.location}, ${listing.country}
     </div>
 </div>
 `,

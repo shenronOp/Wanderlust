@@ -76,10 +76,6 @@ app.use((req, res, next)=>{
 
 
 
-app.get("/", (req, res)=>{
-    res.send("Hi I am root");
-})
-
 
 
 app.use("/", userRouter);

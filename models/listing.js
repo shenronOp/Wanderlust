@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Review=require('./review');
+const { required } = require('joi');
 
 const listingSchema = new mongoose.Schema({
     title: {
@@ -42,6 +43,13 @@ const listingSchema = new mongoose.Schema({
             required: true
         }
     },
+
+    category: {
+        type: String,
+        enum: [""],
+        required: true,
+    },
+    
     reviews:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Review"
