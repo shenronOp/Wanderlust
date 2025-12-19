@@ -1,5 +1,5 @@
 const Listing=require('../models/listing');
-
+const {getCoord}=require('../utils/getCoordinates');
 
 module.exports.index=async(req, res, next)=>{
     const listings=await Listing.find({});
@@ -28,10 +28,18 @@ module.exports.showListing=async(req, res)=>{
 }
 
 module.exports.createListing=async(req, res, next)=>{
-    let url=req.file.path;
-    let filename=req.file.filename;
+    
+    if(req.file){
+        let url=req.file.path;
+        let filename=req.file.filename;
+        req.body.image={url, filename};
+    }
     req.body.owner=req.user._id;
-    req.body.image={url, filename};
+    
+    req.body.geometry={}
+    req.body.geometry.type="Point";
+    req.body.geometry.coordinates=Object.values(await getCoord(req.body.location, req.body.country));
+    console.log(req.body.geometry.coordinates)
     const newListing=await Listing.create(req.body);
     console.log(newListing);
     req.flash("success", "New listing created!")
@@ -67,11 +75,15 @@ module.exports.renderEditForm=async(req, res)=>{
 module.exports.updateListing=async(req, res)=>{
 
     if(!req.body)req.flash("error", "Need all details to edit listing")
-    if(typeof req.file!=undefined){
+    console.log(req.file);
+    if(req.file){
         let url=req.file.path;
         let filename=req.file.filename;
         req.body.owner=req.user._id;
         req.body.image={url, filename};
+        req.body.geometry={};
+        req.body.geometry.type="Point"
+        req.body.geometry.coordinates=Object.values(await getCoord(req.body.location, req.body.country));
     }    
     const {id}=req.params;
     const updatedlisting=await Listing.findByIdAndUpdate(id, req.body);

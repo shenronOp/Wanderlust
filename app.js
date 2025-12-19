@@ -26,7 +26,7 @@ const {isLoggedIn}=require("./middleware");
 
 const mongoose=require('mongoose');
 const { name } = require('ejs');
-const MONGO_URL="mongodb://localhost:27017/wanderlust"
+const MONGO_URL="mongodb://localhost:27017/wanderlust";
 async function main (URL){
     await mongoose.connect(URL);
 }

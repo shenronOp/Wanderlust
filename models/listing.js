@@ -10,8 +10,14 @@ const listingSchema = new mongoose.Schema({
         type: String
     },
     image: {
-        url:String,
-        filename:String,
+        type:{
+            url:String,
+            filename:String,
+        },
+        default:{
+            url:"/images/defaultImg.jpg",
+            filename:"Nil"
+        }
     },
     price: {
         type: Number
@@ -22,6 +28,19 @@ const listingSchema = new mongoose.Schema({
     },
     country: {
         type: String,
+    },
+
+    geometry: {
+        type: {
+            type: String,
+            enum: ["Point"],
+            required: true,
+            default: "Point"
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
     },
     reviews:[{
         type:mongoose.Schema.Types.ObjectId,
