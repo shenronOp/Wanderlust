@@ -2,8 +2,13 @@ const Listing=require('../models/listing');
 const {getCoord}=require('../utils/getCoordinates');
 
 module.exports.index=async(req, res, next)=>{
+    const {category}=req.query;
+    if(category){
+        const listings=await Listing.find({category:category});
+        return res.render("listings/index", {listings, category});
+    }
     const listings=await Listing.find({});
-    return res.render("listings/index", {listings});
+    return res.render("listings/index", {listings, category:"none"});
 }
 
 module.exports.renderNewForm=async(req, res)=>{

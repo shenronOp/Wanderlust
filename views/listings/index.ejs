@@ -36,62 +36,90 @@
             display: flex;
             align-items: center;
         }
+
+        .filter a{
+            text-decoration: none;
+            color: inherit;
+
+        }
     </style>
 
     <div id="filters">
-        <div class="filter">
-            <div><i class="fa-solid fa-fire"></i></div>
-            <p>Trending</p>
+        <div id="Trending" class="filter">
+            <a href="<%= category === 'Trending' ? '/listings' : '/listings?category=Trending' %>">
+                <div><i class="fa-solid fa-fire"></i></div>
+                <p>Trending</p>
+            </a>
+        </div>
+        
+        <div id="Rooms" class="filter">
+            <a href=<%= category==="Rooms"? "/listings" : "/listings?category=Rooms" %>>
+                <div><i class="fa-solid fa-bed"></i></div>
+                <p>Rooms</p>
+            </a>
         </div>
 
-        <div class="filter">
-            <div><i class="fa-solid fa-bed"></i></div>
-            <p>Rooms</p>
+        <div id="Iconic Cities" class="filter">
+            <a href=<%= category==="Iconic Cities"? "/listings" : "/listings?category=Iconic Cities" %>>
+                <div><i class="fa-solid fa-mountain-city"></i></div>
+                <p>Iconic Cities</p>
+            </a>
         </div>
 
-        <div class="filter">
-            <div><i class="fa-solid fa-mountain-city"></i></div>
-            <p>Iconic Cities</p>
+        <div id="Mountains" class="filter">
+            <a href=<%= category==="Mountains"? "/listings" : "/listings?category=Mountains" %>>
+                <div><i class="fa-solid fa-mountain"></i></div>
+                <p>Mountains</p>
+            </a>
         </div>
 
-        <div class="filter">
-            <div><i class="fa-solid fa-mountain"></i></div>
-            <p>Mountains</p>
+        <div id="Castles" class="filter">
+            <a href=<%= category==="Castles"? "/listings" : "/listings?category=Castles" %>>
+                <div><i class="fa-brands fa-fort-awesome"></i></div>
+                <p>Castles</p>
+            </a>
         </div>
 
-        <div class="filter">
-            <div><i class="fa-brands fa-fort-awesome"></i></div>
-            <p>Castles</p>
+        <div id="Pools" class="filter">
+            <a href=<%= category==="Pools"? "/listings" : "/listings?category=Pools" %>>
+                <div><i class="fa-solid fa-person-swimming"></i></div>
+                <p>Pools</p>
+            </a>
         </div>
 
-        <div class="filter">
-            <div><i class="fa-solid fa-person-swimming"></i></div>
-            <p>Pools</p>
+        <div id="Camping" class="filter">
+            <a href=<%= category==="Camping"? "/listings" : "/listings?category=Camping" %>>
+                <div><i class="fa-solid fa-campground"></i></div>
+                <p>Camping</p>
+            </a>
         </div>
 
-        <div class="filter">
-            <div><i class="fa-solid fa-campground"></i></div>
-            <p>Camping</p>
+        <div id="Farms" class="filter">
+            <a href=<%= category==="Farms"? "/listings" : "/listings?category=Farms" %>>
+                <div><i class="fa-solid fa-cow"></i></div>
+                <p>Farms</p>
+            </a>
         </div>
 
-        <div class="filter">
-            <div><i class="fa-solid fa-cow"></i></div>
-            <p>Farms</p>
+        <div id="Arctic" class="filter">
+            <a href=<%= category==="Arctic"? "/listings" : "/listings?category=Arctic" %>>
+                <div><i class="fa-solid fa-snowflake"></i></div>
+                <p>Arctic</p>
+            </a>
         </div>
 
-        <div class="filter">
-            <div><i class="fa-solid fa-snowflake"></i></div>
-            <p>Arctic</p>
+        <div id="Domes" class="filter">
+            <a href=<%= category==="Domes"? "/listings" : "/listings?category=Domes" %>>
+                <div><i class="fa-solid fa-landmark-dome"></i></div>
+                <p>Domes</p>
+            </a>
         </div>
 
-        <div class="filter">
-            <div><i class="fa-solid fa-landmark-dome"></i></div>
-            <p>Domes</p>
-        </div>
-
-        <div class="filter">
-            <div><i class="fa-solid fa-ship"></i></div>
-            <p>Boats</p>
+        <div id="Boats" class="filter">
+            <a href=<%= category==="Boats"? "/listings" : "/listings?category=Boats" %>>
+                <div><i class="fa-solid fa-ship"></i></div>
+                <p>Boats</p>
+            </a>
         </div>
 
         <div class="tax-toggle">
@@ -139,4 +167,13 @@
                 else info.style.display="none"
             }
         })
+
+        let category="<%= category %>"
+        if(category){
+            let categoryID=document.getElementById(category)
+            categoryID.style.opacity="1";
+            categoryID.selected=true;
+        }
+
+
     </script>
