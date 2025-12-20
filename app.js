@@ -14,6 +14,7 @@ const userRouter=require("./routes/users");
 
 const cookieParser=require("cookie-parser");
 const session=require("express-session");
+const MongoStore=require('connect-mongo').default;
 const flash=require('connect-flash');
 
 const passport=require('passport');
@@ -26,7 +27,7 @@ const {isLoggedIn}=require("./middleware");
 
 const mongoose=require('mongoose');
 const { name } = require('ejs');
-const MONGO_URL="mongodb://localhost:27017/wanderlust";
+const MONGO_URL=process.env.MONGO_URL;
 async function main (URL){
     await mongoose.connect(URL);
 }
@@ -45,16 +46,29 @@ app.engine('ejs', ejsMate);
 app.use(express.static(path.resolve('./public')));
 app.use(cookieParser());
 
+const store=MongoStore.create({
+    mongoUrl:MONGO_URL,
+    crypto:{
+        secret:process.env.SESSION_SECRET
+    },
+    touchAfter:24*60*60
+});
+
+store.on("error", (err)=>{
+    console.log("ERROR in Mongo Session Store", err)
+})
 const sessionOptions={
-    secret: "mysupersecretcode",
+    store,
+    secret: process.env.SESSION_SECRET,
     resave:false,
-    saveUninitialized:true,
+    saveUninitialized:false,
     cookie:{
         expires: Date.now()+3*24*60*60*1000,
         maxAge:3*24*60*60*1000,
         httpOnly:true,
     }
 };
+
 
 app.use(session(sessionOptions));
 app.use(flash());
