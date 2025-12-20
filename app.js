@@ -96,6 +96,9 @@ app.use("/", userRouter);
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 
+app.get("/", (req, res)=>{
+    res.redirect("/listings");
+})
 
 //error MWs---------------------------------------------    
 app.use((req, res, next)=>{
