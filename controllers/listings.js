@@ -1,13 +1,24 @@
 const Listing=require('../models/listing');
 const {getCoord}=require('../utils/getCoordinates');
+const client=require("../client")
 
 module.exports.index=async(req, res, next)=>{
     const {category}=req.query;
     if(category){
+        const redisData=await client.get(`listing:${category}`)
+        console.log(redisData)
+        if(redisData)return res.render("listings/index", {listings:JSON.parse(redisData), category});
         const listings=await Listing.find({category:category});
+        await client.set(`listing:${category}`, JSON.stringify(listings))
+        await client.expire(`listing:${category}`, 10)
         return res.render("listings/index", {listings, category});
     }
+    const redisListings=await client.get("listings:all")
+    console.log(redisListings)
+    if(redisListings)return res.render("listings/index", {listings:JSON.parse(redisListings), category:"none"});
     const listings=await Listing.find({});
+    await client.set("listings:all", JSON.stringify(listings))
+    await client.expire("listings:all", 10)
     return res.render("listings/index", {listings, category:"none"});
 }
 
@@ -18,6 +29,10 @@ module.exports.renderNewForm=async(req, res)=>{
 
 module.exports.showListing=async(req, res)=>{
     let {id}=req.params;
+    const redisData=await client.get(`listing:${id}`)
+    console.log(redisData)
+    if(redisData)return res.status(200).render("listings/show", {listing:JSON.parse(redisData)});
+
     let listing=await Listing.findById(id).populate({
         path:"reviews",
         populate:{
@@ -29,6 +44,7 @@ module.exports.showListing=async(req, res)=>{
         return res.redirect("/listings");
     }
     console.log(listing);
+    await client.set(`listing:${id}`, JSON.stringify(listing), "EX", 10)
     return res.status(200).render("listings/show", {listing});
 }
 

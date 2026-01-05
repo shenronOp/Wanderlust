@@ -32,7 +32,10 @@ async function main (URL){
     await mongoose.connect(URL);
 }
 
-main(MONGO_URL)
+main(MONGO_URL, {
+    tls: true,
+    tlsAllowInvalidCertificates: true
+})
     .then(()=>console.log("connected to DB"))
     .catch(()=>console.log("db error"));
 
@@ -81,8 +84,8 @@ passport.deserializeUser(User.deserializeUser());
 //-----------------middleware---------------------
 
 app.use((req, res, next)=>{
-    res.locals.success=req.flash("success");
-    res.locals.error=req.flash("error");
+    res.locals.success=req.flash("success") || [];
+    res.locals.error=req.flash("error") || [];
     res.locals.currentUser=req.user;
     next();
 })
