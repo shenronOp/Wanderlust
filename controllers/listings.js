@@ -107,7 +107,13 @@ module.exports.updateListing=async(req, res)=>{
         req.body.geometry.coordinates=Object.values(await getCoord(req.body.location, req.body.country));
     }    
     const {id}=req.params;
+
+    await client.del(`listing:${id}`)
+    
+    await client.del("listings:all")
+
     const updatedlisting=await Listing.findByIdAndUpdate(id, req.body);
+    await client.del(`listing:${updatedlisting.category}`)
     req.flash("success", "successfully updated the listing")
     return res.redirect(`/listings/${id}`);
 }
@@ -116,6 +122,11 @@ module.exports.destroyListing=async(req, res)=>{
     const {id}=req.params;
     const deletedListing=await Listing.findByIdAndDelete(id);
     console.log("DELETED LISTING:-"+deletedListing);
+
+    await client.del(`listing:${id}`)
+    await client.del(`listing:${deletedListing.category}`)
+    await client.del("listings:all")
+
     req.flash("success", "listing deleted!");
     return res.redirect("/listings");
 }
